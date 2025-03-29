@@ -3,78 +3,74 @@ import Link from "next/link"
 
 export default function Footer() {
     return (
-        <footer className="bg-gray-100 text-[#202020] pt-12 pb-6 font-sans">
+        <footer className="bg-gray-100 text-[#202020] pt-12 pb-6">
             <div className="container mx-auto px-6">
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-12">
+                <div className="flex items-start xl:justify-between lg:justify-start justify-between flex-wrap 2xl:mb-12 2xl:space-x-0 xl:space-x-14 space-x-10 space-y-10">
                     {/* Logo and App Downloads Section */}
-                    <div className="md:col-span-3">
-                        <div className="mb-8">
-                            <Image src="/image/logo/logo.png" alt="DailyWe Logo" width={220} height={60} className="mb-1" />
-                            <p className="text-[#2d6d5c] font-medium text-sm mt-1">Fresh. Fast. DailyWe.</p>
-                        </div>
-
+                    <div className="w-[296px] mx-w-full flex flex-col lg:items-start items-center">
+                            <Image src="/image/logo/main_logo.png" alt="DailyWe Logo" width={211} height={72} className="xl:mb-[50px] mb-8 xl:w-[211px] h-[72px] w-[190px]" />
                         <div>
-                            <h3 className="text-xl font-semibold text-[#002316] mb-4">Get deliveries with DailyWe</h3>
-                            <p className="mb-5 text-sm leading-relaxed">
+                            <h3 className="text-xl font-semibold text-[#002316] xl:mb-5 mb-4 lg:text-start text-center">Get deliveries with DailyWe</h3>
+                            <p className="xl:mb-[50px] mb-10 text-base font-light leading-relaxed lg:text-start text-center">
                                 Nor again is there anyone who loves or pursues or desires to obtain.
                             </p>
-                            <div className="flex space-x-3">
+                            <div className="flex space-x-3 lg:justify-start justify-center">
                                 <Link href="#" className="block">
                                     <Image src="/image/play-store.png" alt="Get it on Google Play" width={135} height={40} />
                                 </Link>
                                 <Link href="#" className="block">
-                                    <Image src="/image/app-store.png" alt="Download on App Store" width={135} height={40} />
+                                    <Image src="/image/app-store.png" alt="Download on App Store" width={135} height={40} className="w-[135px] h-[40px]"/>
                                 </Link>
                             </div>
                         </div>
                     </div>
 
                     {/* Top Categories Column */}
-                    <div className="md:col-span-2">
-                        <h3 className="text-lg font-semibold text-[#002316] mb-4">Top Categories</h3>
+                    <div className="w-auto">
+                        <h3 className="2xl:text-[20px] text-[19px] font-semibold text-[#002316] mb-[22px]">Top Categories</h3>
                         <ul className="space-y-2.5 text-sm">
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Fruits & Vegetables
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Dairy Products
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Bakery & Chocolates
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Meat & Seafood
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Dry Fruits & Nuts
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Beverages & Mixes
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Pantry Essentials
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Household Supplies
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Kitchenware & Appliances
                                 </Link>
                             </li>
@@ -82,51 +78,51 @@ export default function Footer() {
                     </div>
 
                     {/* Bulk Order Solutions Column */}
-                    <div className="md:col-span-3">
-                        <h3 className="text-lg font-semibold text-[#002316] mb-4">Bulk Order Solutions</h3>
+                    <div className="w-auto">
+                        <h3 className="text-[20px] font-semibold text-[#002316] mb-[22px]">Bulk Order Solutions</h3>
                         <ul className="space-y-2.5 text-sm">
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Wholesale Delivery
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Restaurant & Hotel Supplies
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Office Pantry Stock
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Bulk Order Discounts
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Subscription & Recurring Order
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Custom Packaging Services
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Corporate Gifting
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Wholesale Pricing
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Customized Orders
                                 </Link>
                             </li>
@@ -134,51 +130,51 @@ export default function Footer() {
                     </div>
 
                     {/* DailyWe Programs Column */}
-                    <div className="md:col-span-2">
-                        <h3 className="text-lg font-semibold text-[#002316] mb-4">DailyWe Programs</h3>
+                    <div className="w-auto">
+                        <h3 className="text-[20px] font-semibold text-[#002316] mb-[22px]">DailyWe Programs</h3>
                         <ul className="space-y-2.5 text-sm">
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Loyalty Rewards
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Promo Codes & Coupons
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Gift Cards
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Referral Program
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Subscription Plans
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Special Offers
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Partner with Us
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Loyalty Rewards
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Subscription Plans
                                 </Link>
                             </li>
@@ -186,51 +182,51 @@ export default function Footer() {
                     </div>
 
                     {/* Customer Support Column */}
-                    <div className="md:col-span-2">
-                        <h3 className="text-lg font-semibold text-[#002316] mb-4">Customer Support</h3>
+                    <div className="w-auto">
+                        <h3 className="text-[20px] font-semibold text-[#002316] mb-[22px]">Customer Support</h3>
                         <ul className="space-y-2.5 text-sm">
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     FAQs
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Payment & Refunds
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Shipping & Delivery
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Return & Exchange Policy
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Contact Us
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Track Your Order
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Terms & Conditions
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Privacy Policy
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-[#2d6d5c]">
+                                <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
                                     Customized Orders
                                 </Link>
                             </li>
@@ -242,9 +238,9 @@ export default function Footer() {
                 <hr className="border-gray-300 my-6" />
 
                 {/* Bottom section with copyright and social links */}
-                <div className="flex flex-col md:flex-row justify-between items-center py-2">
-                    <div className="mb-4 md:mb-0">
-                        <p className="text-sm">
+                <div className="flex flex-row lg:justify-between justify-center py-2 flex-wrap gap-y-3">
+                    <div className="">
+                        <p className="text-base xl:text-start text-center">
                             © Copyright 2024 -{" "}
                             <Link href="#" className="text-[#2d6d5c] hover:underline">
                                 DailyWe
@@ -253,14 +249,14 @@ export default function Footer() {
                         </p>
                     </div>
 
-                    <div className="flex items-center space-x-6">
-                        <Link href="#" className="text-sm hover:text-[#2d6d5c]">
+                    <div className="flex items-center sm:justify-between justify-center sm:space-x-6 space-x-3 gap-y-3 flex-wrap divide-x divide-[#0023161A]">
+                        <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light sm:pr-6 pr-3">
                             Terms of Use
                         </Link>
-                        <Link href="#" className="text-sm hover:text-[#2d6d5c]">
+                        <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light sm:pr-6 pr-3">
                             Privacy Policy
                         </Link>
-                        <div className="flex items-center space-x-4 ml-4">
+                        <div className="flex items-center space-x-4">
                             <Link href="#" aria-label="Facebook">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -341,7 +337,7 @@ export default function Footer() {
                 </div>
 
                 {/* Disclaimer text */}
-                <div className="mt-6 text-xs text-gray-600 max-w-6xl">
+                <div className="mt-6 xl:text-base text-sm text-gray-600">
                     <p>
                         This promotion is valid only for the first order placed through DailyWe. To qualify, the order must meet the
                         minimum basket size specified in the promotional terms. The offer will expire on the date displayed in the
