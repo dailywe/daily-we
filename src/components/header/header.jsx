@@ -132,7 +132,7 @@ export default function Header() {
                             <circle cx="19" cy="21" r="1" />
                             <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
                         </svg>
-                        <span className="sm:block hidden">({items?.length} item) ₹{formatAmount(cartTotal)}</span>
+                        <span className="sm:block hidden">({items?.length} item) {formatAmount(cartTotal)}</span>
                     </button>
 
                     {/* Cart Drawer */}
@@ -219,7 +219,7 @@ export default function Header() {
                             <div className="mt-auto pt-3 px-[25px]">
                                 <div className="flex items-center justify-between border-b border-[#0023161A] py-[15px] mb-[22px]">
                                     <p className="text-lg">Sub Total</p>
-                                    <p className="text-lg">₹{formatAmount(cartTotal)}</p>
+                                    <p className="text-lg">{formatAmount(cartTotal)}</p>
 
                                 </div>
                                 <button className="bg-[#066a44] text-white px-6 py-3 rounded-md hover:bg-[#002316] transition-colors w-full mb-[12px] cursor-pointer">
