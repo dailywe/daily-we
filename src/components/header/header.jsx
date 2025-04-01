@@ -7,18 +7,25 @@ import { useCustomCart } from "@/lib/context/CustomCartProvider";
 
 export default function Header() {
 
-    const { items, cartTotal, removeItem } = useCustomCart();
+    const { items, cartTotal, removeItem, isCartOpen, setCartOpen, updateItemQuantity } = useCustomCart();
 
     const [location, setLocation] = useState("Select Location");
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [moreMenuOpen, setMoreMenuOpen] = useState(false);
     const [openMenu, setOpenMenu] = useState(null);
-    const [isOpen, setIsOpen] = useState(false);
 
     // Toggle submenu
     const handleToggle = (menu) => {
         setOpenMenu(openMenu === menu ? null : menu);
     };
+
+    function formatAmount(value) {
+        let amount = Number(value);
+        if (isNaN(amount)) {
+            amount = 0; // Default value
+        }
+        return "₹" + amount.toFixed(2);
+    }
 
     // Close cart when clicking outside
     useEffect(() => {
@@ -27,16 +34,16 @@ export default function Header() {
                 !event.target.closest("#cart-drawer") &&
                 !event.target.closest("#cart-button")
             ) {
-                setIsOpen(false);
+                setCartOpen(false);
             }
         };
-        if (isOpen) {
+        if (isCartOpen) {
             document.addEventListener("click", handleClickOutside);
         } else {
             document.removeEventListener("click", handleClickOutside);
         }
         return () => document.removeEventListener("click", handleClickOutside);
-    }, [isOpen]);
+    }, [isCartOpen]);
 
     return (
         <header className="w-full bg-white">
@@ -110,7 +117,7 @@ export default function Header() {
                 {/* Cart */}
                 <div className="flex items-center sm:divide-x-0 divide-x divide-gray-200">
                     {/* Cart Button */}
-                    <button id="cart-button" onClick={() => setIsOpen(true)} className="mr-3 flex items-center text-sm font-medium pr-3 cursor-pointer">
+                    <button id="cart-button" onClick={() => setCartOpen(true)} className="mr-3 flex items-center text-sm font-medium pr-3 cursor-pointer">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             className="sm:mr-2 sm:h-5 sm:w-5 w-[22px]"
@@ -125,22 +132,22 @@ export default function Header() {
                             <circle cx="19" cy="21" r="1" />
                             <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
                         </svg>
-                        <span className="sm:block hidden">({items?.length} item) ₹{cartTotal}</span>
+                        <span className="sm:block hidden">({items?.length} item) ₹{formatAmount(cartTotal)}</span>
                     </button>
 
                     {/* Cart Drawer */}
                     <div
-                        className={`fixed inset-0 bg-opacity-50 backdrop-blur-xs z-50 flex justify-end items-start transition-opacity duration-300 ${isOpen ? "opacity-100 visible" : "opacity-0 invisible"
+                        className={`fixed inset-0 bg-opacity-50 backdrop-blur-xs z-50 flex justify-end items-start transition-opacity duration-300 ${isCartOpen ? "opacity-100 visible" : "opacity-0 invisible"
                             }`}
                     >
                         <div id="cart-drawer"
-                            className={`w-md max-w-full h-full bg-white shadow-lg py-[22px] flex flex-col transform transition-transform duration-300 ${isOpen ? "translate-x-0" : "translate-x-full"
+                            className={`w-md max-w-full h-full bg-white shadow-lg py-[22px] flex flex-col transform transition-transform duration-300 ${isCartOpen ? "translate-x-0" : "translate-x-full"
                                 }`}
                         >
                             {/* Header */}
                             <div className="flex justify-between items-center pb-3 px-[25px]">
                                 <h2 className="text-[25px] font-semibold">Your Cart</h2>
-                                <button onClick={() => setIsOpen(false)} className="text-gray-600 text-xl cursor-pointer">
+                                <button onClick={() => setCartOpen(false)} className="text-gray-600 text-xl cursor-pointer">
                                     ✕
                                 </button>
                             </div>
@@ -189,9 +196,15 @@ export default function Header() {
                                                         </p>
                                                     </div>
                                                     <div className="flex items-center justify-between border bg-[#066A44] px-2 border-gray-300 rounded-md overflow-hidden w-[69px] h-[30px]">
-                                                        <button className="py-1 bg-[#066A44] text-white cursor-pointer">-</button>
-                                                        <span className=" py-1 bg-[#066A44] text-white">1</span>
-                                                        <button className=" py-1 bg-[#066A44] text-white cursor-pointer">+</button>
+                                                        <button className="py-1 bg-[#066A44] text-white cursor-pointer"
+                                                            onClick={() =>
+                                                                item.quantity > 1 && updateItemQuantity(item.id, item.quantity - 1)
+                                                            }
+                                                        >-</button>
+                                                        <span className=" py-1 bg-[#066A44] text-white">{item.quantity}</span>
+                                                        <button className=" py-1 bg-[#066A44] text-white cursor-pointer"
+                                                            onClick={() => updateItemQuantity(item.id, item.quantity + 1)}
+                                                        >+</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -206,7 +219,7 @@ export default function Header() {
                             <div className="mt-auto pt-3 px-[25px]">
                                 <div className="flex items-center justify-between border-b border-[#0023161A] py-[15px] mb-[22px]">
                                     <p className="text-lg">Sub Total</p>
-                                    <p className="text-lg">₹{cartTotal}</p>
+                                    <p className="text-lg">₹{formatAmount(cartTotal)}</p>
 
                                 </div>
                                 <button className="bg-[#066a44] text-white px-6 py-3 rounded-md hover:bg-[#002316] transition-colors w-full mb-[12px] cursor-pointer">

@@ -64,6 +64,8 @@ export const CustomCartProvider = ({
 
     const [state, dispatch] = React.useReducer(reducer, JSON.parse(savedCart));
 
+    const [isCartOpen, setCartOpen] = React.useState(false); // ✅ Cart drawer state
+
     React.useEffect(() => {
         saveCart(JSON.stringify(state));
     }, [state, saveCart]);
@@ -92,12 +94,14 @@ export const CustomCartProvider = ({
             const payload = { ...item, quantity };
             dispatch({ type: "ADD_ITEM", payload });
             onItemAdd && onItemAdd(payload);
+            setCartOpen(true); // ✅ Open cart when item is added
             return;
         }
 
         const payload = { ...item, quantity: currentItem.quantity + quantity };
         dispatch({ type: "UPDATE_ITEM", id: item.id, payload });
         onItemUpdate && onItemUpdate(payload);
+        setCartOpen(true); // ✅ Open cart when item is updated
     };
 
     const updateItem = (id, payload) => {
@@ -165,6 +169,8 @@ export const CustomCartProvider = ({
                 clearCartMetadata,
                 setCartMetadata,
                 updateCartMetadata,
+                isCartOpen,      // ✅ exposed globally
+                setCartOpen,     // ✅ exposed globally
             }}
         >
             {children}
@@ -244,7 +250,7 @@ function calculateUniqueItems(items) {
 export const useCustomCart = () => {
     const context = React.useContext(CartContext);
     if (!context) {
-        throw new Error("useWishlist must be used within a WishlistProvider");
+        throw new Error("useCustomCart must be used within a CustomCartProvider");
     }
     return context;
 };

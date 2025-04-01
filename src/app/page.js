@@ -42,8 +42,12 @@ function ProductCard({ product }) {
 
   const { items, addItem } = useCustomCart();
 
+  const isInCart = items.some((item) => item.id === product.id);
+
   const handleAddToCart = (product, quantity) => {
-    addItem(product, quantity);
+    if (!isInCart) {
+      addItem(product, quantity);
+    }
   };
 
   // console.log(cartTotal)
@@ -97,8 +101,14 @@ function ProductCard({ product }) {
 
       <div className="mt-auto flex justify-between items-center">
         <span className="text-[20px] font-medium">{product.finalPrice}</span>
-        <button onClick={() => handleAddToCart(product, 1)} className="bg-[#066a44] text-white px-4 py-2 rounded-md flex items-center cursor-pointer">
-          <span className="mr-1">+</span> Add
+        <button
+          onClick={() => handleAddToCart(product, 1)}
+          disabled={isInCart}
+          className={`px-4 py-2 rounded-md flex items-center ${isInCart
+            ? "bg-gray-400 text-white cursor-not-allowed"
+            : "bg-[#066a44] text-white cursor-pointer"
+            }`}>
+          <span className="mr-1">+</span> {isInCart ? "Added" : "Add"}
         </button>
       </div>
     </div>
