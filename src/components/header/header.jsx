@@ -1,27 +1,50 @@
-"use client"
+"use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useCustomCart } from "@/lib/context/CustomCartProvider";
 
 export default function Header() {
+
+    const { items, cartTotal, removeItem } = useCustomCart();
+
     const [location, setLocation] = useState("Select Location");
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [moreMenuOpen, setMoreMenuOpen] = useState(false);
     const [openMenu, setOpenMenu] = useState(null);
+    const [isOpen, setIsOpen] = useState(false);
 
     // Toggle submenu
     const handleToggle = (menu) => {
         setOpenMenu(openMenu === menu ? null : menu);
     };
 
+    // Close cart when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                !event.target.closest("#cart-drawer") &&
+                !event.target.closest("#cart-button")
+            ) {
+                setIsOpen(false);
+            }
+        };
+        if (isOpen) {
+            document.addEventListener("click", handleClickOutside);
+        } else {
+            document.removeEventListener("click", handleClickOutside);
+        }
+        return () => document.removeEventListener("click", handleClickOutside);
+    }, [isOpen]);
+
     return (
         <header className="w-full bg-white">
-            <div className="mx-auto flex items-center justify-between py-3 px-10 border-b border-[#0023161A]">
+            <div className="mx-auto flex items-center justify-between py-3 sm:px-10 px-4 border-b border-[#0023161A]">
                 {/* Logo */}
                 <div className="flex items-center">
                     <Link href="/" className="flex items-center">
-                        <div className="relative h-10 w-32 border-r border-[#0023161A] pr-4">
+                        <div className="relative h-10 w-32 sm:border-r border-[#0023161A] pr-4">
                             <Image
                                 src="/image/logo/logo.png?height=40&width=120"
                                 alt="DailyWe Logo"
@@ -35,13 +58,10 @@ export default function Header() {
 
                     {/* Delivery Location */}
                     <div className="ml-4 hidden md:block">
-                        <div className="flex flex-col">
+                        <div className="flex flex-col cursor-not-allowed">
                             <span className="text-xs text-gray-500">Delivery in</span>
-                            <button
-                                className="flex items-center text-sm font-medium"
-                                onClick={() => {
-                                    /* Handle location selection */
-                                }}
+                            <button className="flex items-center text-sm font-medium" onClick={() => {
+                            }}
                             >
                                 {location}
                                 <svg
@@ -62,7 +82,7 @@ export default function Header() {
                 </div>
 
                 {/* Search Bar */}
-                <div className="mx-4 flex-1 max-w-[861px] ">
+                <div className="mx-4 flex-1 max-w-[861px] sm:block hidden">
                     <div className="relative">
                         <div className="absolute inset-y-0 left-0 flex items-center pl-3">
                             <svg
@@ -88,11 +108,12 @@ export default function Header() {
                 </div>
 
                 {/* Cart */}
-                <div className="flex items-center">
-                    <button className="mr-4 flex items-center text-sm font-medium">
+                <div className="flex items-center sm:divide-x-0 divide-x divide-gray-200">
+                    {/* Cart Button */}
+                    <button id="cart-button" onClick={() => setIsOpen(true)} className="mr-3 flex items-center text-sm font-medium pr-3 cursor-pointer">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            className="mr-2 h-5 w-5"
+                            className="sm:mr-2 sm:h-5 sm:w-5 w-[22px]"
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="currentColor"
@@ -104,32 +125,153 @@ export default function Header() {
                             <circle cx="19" cy="21" r="1" />
                             <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
                         </svg>
-                        <span>(1 item) ₹99</span>
+                        <span className="sm:block hidden">({items?.length} item) ₹{cartTotal}</span>
                     </button>
 
-                    {/* Login/Signup Button */}
-                    <Link
-                        href="/login"
-                        className="rounded-md bg-[#F8C519] px-4 py-2 text-sm font-medium text-black hover:bg-[#F8C519] transition-colors"
+                    {/* Cart Drawer */}
+                    <div
+                        className={`fixed inset-0 bg-opacity-50 backdrop-blur-xs z-50 flex justify-end items-start transition-opacity duration-300 ${isOpen ? "opacity-100 visible" : "opacity-0 invisible"
+                            }`}
                     >
-                        Login/Signup
+                        <div id="cart-drawer"
+                            className={`w-md max-w-full h-full bg-white shadow-lg py-[22px] flex flex-col transform transition-transform duration-300 ${isOpen ? "translate-x-0" : "translate-x-full"
+                                }`}
+                        >
+                            {/* Header */}
+                            <div className="flex justify-between items-center pb-3 px-[25px]">
+                                <h2 className="text-[25px] font-semibold">Your Cart</h2>
+                                <button onClick={() => setIsOpen(false)} className="text-gray-600 text-xl cursor-pointer">
+                                    ✕
+                                </button>
+                            </div>
+                            <div className="flex items-center justify-between border-l-2 border-[#066A44] px-[25px] py-3 bg-[#0023160A]">
+                                <span className="text-[#066A44] text-[15px]">Your total savings</span>
+                                <span className="text-[#066A44] text-[15px]">₹0.00</span>
+                            </div>
+
+                            {/* Cart Items */}
+                            <div className="flex-1 overflow-auto mt-4 space-y-4 px-[25px]">
+                                {items?.length > 0 ? (
+                                    items?.map((item, index) => (
+                                        <div
+                                            key={index}
+                                            className="flex items-center border-b border-[#0023161A] pb-4"
+                                        >
+                                            {/* {console.log(item)} */}
+                                            <div className="border border-[#0023161A] p-1.5 rounded-md mr-[17px] w-[80px] h-[86px]">
+                                                <Image
+                                                    src={item?.image}
+                                                    width={67}
+                                                    height={67}
+                                                    alt={item?.name}
+                                                    className="rounded-md"
+                                                />
+                                            </div>
+                                            <div className="flex-1 mr-[15px] space-y-[7px]">
+                                                <div className="flex items-center justify-between gap-[30px] w-full">
+                                                    <p className="text-base leading-[21px]">{item.name}</p>
+                                                    <div onClick={() => removeItem(item.id)}>
+                                                        <Image
+                                                            src="/image/delete.png"
+                                                            width={18}
+                                                            height={18}
+                                                            alt="bin"
+                                                            className="rounded-md cursor-pointer"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center justify-between">
+                                                    <div>
+                                                        {/* <p className="text-sm text-[#909090] leading-5 mb-[7px]">{item.weight}</p> */}
+                                                        <p className="text-base font-medium text-[#066A44] leading-5">
+                                                            ₹{item.price}
+                                                            {/* <span className="line-through text-gray-400 text-sm font-normal ml-[5px]">{item.oldPrice}</span> */}
+                                                        </p>
+                                                    </div>
+                                                    <div className="flex items-center justify-between border bg-[#066A44] px-2 border-gray-300 rounded-md overflow-hidden w-[69px] h-[30px]">
+                                                        <button className="py-1 bg-[#066A44] text-white cursor-pointer">-</button>
+                                                        <span className=" py-1 bg-[#066A44] text-white">1</span>
+                                                        <button className=" py-1 bg-[#066A44] text-white cursor-pointer">+</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p className="text-center text-black">Your cart is empty.</p>
+                                )}
+                            </div>
+
+                            {/* Cart Footer */}
+                            <div className="mt-auto pt-3 px-[25px]">
+                                <div className="flex items-center justify-between border-b border-[#0023161A] py-[15px] mb-[22px]">
+                                    <p className="text-lg">Sub Total</p>
+                                    <p className="text-lg">₹{cartTotal}</p>
+
+                                </div>
+                                <button className="bg-[#066a44] text-white px-6 py-3 rounded-md hover:bg-[#002316] transition-colors w-full mb-[12px] cursor-pointer">
+                                    Go To Cart
+                                </button>
+                                <button className="rounded-md bg-[#F8C519] px-6 py-2 text-base font-medium text-black hover:bg-[#F8C519] transition-colors w-full cursor-pointer">
+                                    Checkout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Login/Signup Button */}
+                    <Link href="/" className="sm:rounded-md sm:bg-[#F8C519] sm:px-4 sm:py-2 text-sm font-medium text-black sm:hover:bg-[#F8C519] transition-colors"
+                    >
+                        <span className="sm:block hidden">Login/Signup</span>
+                        <svg
+                            width="22"
+                            height="22"
+                            viewBox="0 0 28 28"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="sm:hidden block"
+                        >
+                            <path
+                                d="M13.9968 14.9818C17.4441 14.9818 20.2387 12.1866 20.2387 8.73846C20.2387 5.29036 17.4441 2.49512 13.9968 2.49512C10.5495 2.49512 7.75488 5.29036 7.75488 8.73846C7.75488 12.1866 10.5495 14.9818 13.9968 14.9818Z"
+                                stroke="black"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            />
+                            <path
+                                d="M23.8057 24.7929C23.8057 22.1909 22.7723 19.6954 20.9328 17.8555C19.0933 16.0156 16.5984 14.9819 13.997 14.9819C11.3955 14.9819 8.90064 16.0156 7.06115 17.8555C5.22165 19.6954 4.18823 22.1909 4.18823 24.7929"
+                                stroke="black"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            />
+                        </svg>
                     </Link>
                 </div>
             </div>
             {/* Bottom Navbar */}
             {/* Sidebar Menu */}
-            <div className={`fixed inset-0 bg-opacity-30 backdrop-blur-xs z-50 transition-opacity ${sidebarOpen ? "opacity-100 visible" : "opacity-0 invisible"}`} onClick={() => setSidebarOpen(false)}></div>
-            <div className={`fixed top-0 left-0 w-[350px] h-full bg-white shadow-md z-50 transform transition-transform py-[13px] px-[22px] ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
+            <div
+                className={`fixed inset-0 bg-opacity-30 backdrop-blur-xs z-50 transition-opacity ${sidebarOpen ? "opacity-100 visible" : "opacity-0 invisible"
+                    }`}
+                onClick={() => setSidebarOpen(false)} >
+            </div>
+            <div
+                className={`fixed top-0 left-0 w-[350px] h-full bg-white shadow-md z-50 transform transition-transform py-[13px] px-[22px] overflow-auto ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+                    }`}
+            >
                 <div className="flex items-center justify-between border-b border-[#0023161A] pb-[14px]">
-                    <Image src="/image/logo/main_logo.png"
+                    <Image
+                        src="/image/logo/main_logo.png"
                         alt="DailyWe Logo"
                         width={130}
                         height={47}
                         className="object-contain"
                         priority
                     />
-                    <button className="text-gray-600 w-[50px]" onClick={() => setSidebarOpen(false)}>
-                        <Image src="/image/Close.svg"
+                    <button className="text-gray-600 w-[50px] cursor-pointer" onClick={() => setSidebarOpen(false)}>
+                        <Image
+                            src="/image/Close.svg"
                             alt="DailyWe Logo"
                             width={18}
                             height={18}
@@ -141,20 +283,17 @@ export default function Header() {
                 <div className="relative">
                     {/* Main Menu */}
                     <div className="mt-2 bg-white">
-                        {/* Fruits & Vegetables */}
+                        {/* Top Categories */}
                         <div>
-                            <button
-                                onClick={() => handleToggle("fruits")}
-                                className="w-full flex justify-between items-center px-6 py-4 border-b border-gray-200 hover:bg-gray-100"
-                            >
-                                <span>Fruits & Vegetables</span>
+                            <button onClick={() => handleToggle("categories")} className="cursor-pointer w-full flex justify-between items-center px-6 py-4 border-b border-gray-200 hover:bg-gray-100">
+                                <span>Top Categories</span>
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     fill="none"
                                     viewBox="0 0 24 24"
-                                    strokeWidth=""
+                                    strokeWidth="2"
                                     stroke="#066A44"
-                                    className={`w-[18px] h-[18px] mt-[1px] transition-transform duration-200 ${openMenu === "fruits" ? "rotate-0" : "-rotate-85"
+                                    className={`w-[18px] h-[18px] mt-[1px] transition-transform duration-200 ${openMenu === "categories" ? "rotate-0" : "-rotate-85"
                                         }`}
                                 >
                                     <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
@@ -162,7 +301,7 @@ export default function Header() {
                             </button>
 
                             {/* Fruits Submenu */}
-                            {openMenu === "fruits" && (
+                            {openMenu === "categories" && (
                                 <div className="bg-gray-50">
                                     <Link href="#" className="block px-8 py-3 hover:bg-gray-200 font-light">Apples</Link>
                                     <Link href="#" className="block px-8 py-3 hover:bg-gray-200 font-light">Bananas</Link>
@@ -171,20 +310,17 @@ export default function Header() {
                             )}
                         </div>
 
-                        {/* Dairy Products */}
+                        {/* Bulk Order Solutions */}
                         <div>
-                            <button
-                                onClick={() => handleToggle("dairy")}
-                                className="w-full flex justify-between items-center px-6 py-4 border-b border-gray-200 hover:bg-gray-100"
-                            >
-                                <span>Dairy Products</span>
+                            <button onClick={() => handleToggle("bulk-porder")} className="cursor-pointer w-full flex justify-between items-center px-6 py-4 border-b border-gray-200 hover:bg-gray-100">
+                                <span>Bulk Order Solutions</span>
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     strokeWidth="2"
                                     stroke="#066A44"
-                                    className={`w-[18px] h-[18px] mt-[1px] transition-transform duration-200 ${openMenu === "dairy" ? "rotate-0" : "-rotate-85"
+                                    className={`w-[18px] h-[18px] mt-[1px] transition-transform duration-200 ${openMenu === "bulk-porder" ? "rotate-0" : "-rotate-85"
                                         }`}
                                 >
                                     <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
@@ -192,50 +328,285 @@ export default function Header() {
                             </button>
 
                             {/* Dairy Submenu */}
-                            {openMenu === "dairy" && (
+                            {openMenu === "bulk-porder" && (
                                 <div className="bg-gray-50">
-                                    <Link href="#" className="block px-8 py-3 hover:bg-gray-200 font-light">Milk</Link>
-                                    <Link href="#" className="block px-8 py-3 hover:bg-gray-200 font-light">Cheese</Link>
-                                    <Link href="#" className="block px-8 py-3 hover:bg-gray-200 font-light">Yogurt</Link>
+                                    <Link
+                                        href="#"
+                                        className="block px-8 py-3 hover:bg-gray-200 font-light"
+                                    >
+                                        Milk
+                                    </Link>
+                                    <Link
+                                        href="#"
+                                        className="block px-8 py-3 hover:bg-gray-200 font-light"
+                                    >
+                                        Cheese
+                                    </Link>
+                                    <Link
+                                        href="#"
+                                        className="block px-8 py-3 hover:bg-gray-200 font-light"
+                                    >
+                                        Yogurt
+                                    </Link>
                                 </div>
                             )}
                         </div>
 
-                        {/* Chicken & Eggs */}
+                        {/* DailyWe Programs */}
                         <div>
                             <button
-                                onClick={() => handleToggle("chicken")}
+                                onClick={() => handleToggle("programs")}
                                 className="w-full flex justify-between items-center px-6 py-4 hover:bg-gray-100"
                             >
-                                <span>Chicken & Eggs</span>
+                                <span>DailyWe Programs</span>
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     strokeWidth="2"
                                     stroke="#066A44"
-                                    className={`w-[18px] h-[18px] mt-[1px] transition-transform duration-200 ${openMenu === "chicken" ? "rotate-0" : "-rotate-85"
+                                    className={`w-[18px] h-[18px] mt-[1px] transition-transform duration-200 ${openMenu === "programs" ? "rotate-0" : "-rotate-85"
                                         }`}
                                 >
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                                    />
                                 </svg>
                             </button>
 
                             {/* Chicken Submenu */}
-                            {openMenu === "chicken" && (
+                            {openMenu === "programs" && (
                                 <div className="bg-gray-50">
-                                    <Link href="#" className="block px-8 py-3 hover:bg-gray-200 font-light">Chicken Breast</Link>
-                                    <Link href="#" className="block px-8 py-3 hover:bg-gray-200 font-light">Whole Chicken</Link>
-                                    <Link href="#" className="block px-8 py-3 hover:bg-gray-200 font-light">Eggs</Link>
+                                    <Link
+                                        href="#"
+                                        className="block px-8 py-3 hover:bg-gray-200 font-light"
+                                    >
+                                        Chicken Breast
+                                    </Link>
+                                    <Link
+                                        href="#"
+                                        className="block px-8 py-3 hover:bg-gray-200 font-light"
+                                    >
+                                        Whole Chicken
+                                    </Link>
+                                    <Link
+                                        href="#"
+                                        className="block px-8 py-3 hover:bg-gray-200 font-light"
+                                    >
+                                        Eggs
+                                    </Link>
                                 </div>
                             )}
+                        </div>
+
+                        {/* Customer Support */}
+                        <div>
+                            <button
+                                onClick={() => handleToggle("customer")}
+                                className="w-full flex justify-between items-center px-6 py-4 hover:bg-gray-100"
+                            >
+                                <span>Customer Support</span>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth="2"
+                                    stroke="#066A44"
+                                    className={`w-[18px] h-[18px] mt-[1px] transition-transform duration-200 ${openMenu === "customer" ? "rotate-0" : "-rotate-85"
+                                        }`}
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                                    />
+                                </svg>
+                            </button>
+
+                            {/* Chicken Submenu */}
+                            {openMenu === "customer" && (
+                                <div className="bg-gray-50">
+                                    <Link
+                                        href="#"
+                                        className="block px-8 py-3 hover:bg-gray-200 font-light"
+                                    >
+                                        Chicken Breast
+                                    </Link>
+                                    <Link
+                                        href="#"
+                                        className="block px-8 py-3 hover:bg-gray-200 font-light"
+                                    >
+                                        Whole Chicken
+                                    </Link>
+                                    <Link
+                                        href="#"
+                                        className="block px-8 py-3 hover:bg-gray-200 font-light"
+                                    >
+                                        Eggs
+                                    </Link>
+                                </div>
+                            )}
+                        </div>
+
+                        <h4 className="2xl:text-[20px] text-[19px] font-semibold text-[#002316] mt-[10px] sm:hidden block">
+                            Categories
+                        </h4>
+                        <div className="divide-y divide-gray-200 block sm:hidden">
+                            <Link
+                                href="#"
+                                className="inline-block align-middle items-center gap-2 text-black w-full text-base py-4 px-6"
+                            >
+                                <Image
+                                    src="/image/Fruits & Vegetables.svg"
+                                    alt="DailyWe Logo"
+                                    width={24}
+                                    height={24}
+                                    className="object-contain lg:w-[24px] lg:h-[24px] w-[20px] h-[20px] inline-block align-middle custom_images_color_filter"
+                                    priority
+                                />
+                                <span className="inline-block align-middle ms-2">
+                                    Fruits & Vegetables
+                                </span>
+                            </Link>
+                            <Link
+                                href="#"
+                                className="inline-block align-middle items-center gap-2 text-black w-full text-base py-4 px-6"
+                            >
+                                <Image
+                                    src="/image/Dairy Products.svg"
+                                    alt="DailyWe Logo"
+                                    width={24}
+                                    height={24}
+                                    className="object-contain lg:w-[24px] lg:h-[24px] w-[20px] h-[20px] inline-block align-middle custom_images_color_filter"
+                                    priority
+                                />
+                                <span className="inline-block align-middle ms-2">Dairy Products</span>
+                            </Link>
+                            <Link
+                                href="#"
+                                className="inline-block align-middle items-center gap-2 text-black w-full text-base py-4 px-6"
+                            >
+                                <Image
+                                    src="/image/Chicken & Eggs.svg"
+                                    alt="DailyWe Logo"
+                                    width={24}
+                                    height={24}
+                                    className="object-contain lg:w-[24px] lg:h-[24px] w-[20px] h-[20px] inline-block align-middle custom_images_color_filter"
+                                    priority
+                                />
+                                <span className="inline-block align-middle ms-2">
+                                    Chicken & Eggs
+                                </span>
+                            </Link>
+                            <Link
+                                href="#"
+                                className="inline-block align-middle items-center gap-2 text-black w-full text-base py-4 px-6"
+                            >
+                                <Image
+                                    src="/image/Dry Fruits & Nuts.svg"
+                                    alt="DailyWe Logo"
+                                    width={24}
+                                    height={24}
+                                    className="object-contain lg:w-[24px] lg:h-[24px] w-[20px] h-[20px] inline-block align-middle custom_images_color_filter"
+                                    priority
+                                />
+                                <span className="inline-block align-middle ms-2">
+                                    Dry Fruits & Nuts
+                                </span>
+                            </Link>
+                            <Link
+                                href="#"
+                                className="inline-block align-middle items-center gap-2 text-black w-full text-base py-4 px-6"
+                            >
+                                <Image
+                                    src="/image/Packaging Material.svg"
+                                    alt="DailyWe Logo"
+                                    width={24}
+                                    height={24}
+                                    className="object-contain lg:w-[24px] lg:h-[24px] w-[20px] h-[20px] inline-block align-middle custom_images_color_filter"
+                                    priority
+                                />
+                                <span className="inline-block align-middle ms-2">
+                                    Packaging Material
+                                </span>
+                            </Link>
+                            <Link
+                                href="#"
+                                className="inline-block align-middle items-center gap-2 text-black w-full text-base py-4 px-6"
+                            >
+                                <Image
+                                    src="/image/Ghee & Oils .svg"
+                                    alt="DailyWe Logo"
+                                    width={24}
+                                    height={24}
+                                    className="object-contain lg:w-[24px] lg:h-[24px] w-[20px] h-[20px] inline-block align-middle custom_images_color_filter"
+                                    priority
+                                />
+                                <span className="inline-block align-middle ms-2">
+                                    Ghee & Oils
+                                </span>
+                            </Link>
+                            <Link
+                                href="#"
+                                className="inline-block align-middle items-center gap-2 text-black w-full text-base py-4 px-6"
+                            >
+                                <Image
+                                    src="/image/Bakery & Chocolates.svg"
+                                    alt="DailyWe Logo"
+                                    width={24}
+                                    height={24}
+                                    className="object-contain lg:w-[24px] lg:h-[24px] w-[20px] h-[20px] inline-block align-middle custom_images_color_filter"
+                                    priority
+                                />
+                                <span className="inline-block align-middle ms-2">
+                                    Bakery & Chocolates
+                                </span>
+                            </Link>
+                            <Link
+                                href="#"
+                                className="inline-block align-middle items-center gap-2 text-black w-full text-base py-4 px-6"
+                            >
+                                <Image
+                                    src="/image/Pulses & Flours.svg"
+                                    alt="DailyWe Logo"
+                                    width={24}
+                                    height={24}
+                                    className="object-contain lg:w-[24px] lg:h-[24px] w-[20px] h-[20px] inline-block align-middle custom_images_color_filter"
+                                    priority
+                                />
+                                <span className="inline-block align-middle ms-2">
+                                    Pulses & Flours
+                                </span>
+                            </Link>
+                            <Link
+                                href="#"
+                                className="inline-block align-middle items-center gap-2 text-black w-full text-base py-4 px-6"
+                            >
+                                <Image
+                                    src="/image/Fish & Seafood.svg"
+                                    alt="DailyWe Logo"
+                                    width={24}
+                                    height={24}
+                                    className="object-contain lg:w-[24px] lg:h-[24px] w-[20px] h-[20px] inline-block align-middle custom_images_color_filter"
+                                    priority
+                                />
+                                <span className="inline-block align-middle ms-2">
+                                    Fish & Seafood
+                                </span>
+                            </Link>
                         </div>
                     </div>
                 </div>
             </div>
-            <div className="bg-[#066A44] text-white px-10 px-auto w-full overflow-auto whitespace-nowrap flex items-center">
-                <button className="text-white text-xl border-r border-[#FFFFFF1A] pr-6 mr-[12px] flex-shrink-0 block" onClick={() => setSidebarOpen(true)}>
-                    <Image src="/image/menu bar.svg"
+            <div className="bg-[#066A44] text-white sm:px-10 px-4 w-full overflow-auto whitespace-nowrap flex items-center">
+                <button
+                    className="text-white text-xl border-r border-[#FFFFFF1A] pr-6 mr-[12px] flex-shrink-0 block py-3 cursor-pointer"
+                    onClick={() => setSidebarOpen(true)}
+                >
+                    <Image
+                        src="/image/menu bar.svg"
                         alt="DailyWe Logo"
                         width={26}
                         height={26}
@@ -243,59 +614,93 @@ export default function Header() {
                         priority
                     />
                 </button>
-                <div className="block whitespace-nowrap flex-nowrap overflow-auto text-sm font-medium">
-                    <Link href="#" className="inline-block align-middle items-center px-[10px] gap-2 text-white lg:text-base text-sm py-3">
-                        <Image src="/image/Fruits & Vegetables.svg"
+                <div className="whitespace-nowrap flex-nowrap overflow-auto text-sont-mem fdium sm:block hidden">
+                    <Link
+                        href="#"
+                        className="inline-block align-middle items-center px-[10px] gap-2 text-white lg:text-base text-sm py-3"
+                    >
+                        <Image
+                            src="/image/Fruits & Vegetables.svg"
                             alt="DailyWe Logo"
                             width={24}
                             height={24}
                             className="object-contain lg:w-[24px] lg:h-[24px] w-[20px] h-[20px] inline-block align-middle"
                             priority
                         />
-                        <span className="inline-block align-middle ms-2">Fruits & Vegetables</span>
+                        <span className="inline-block align-middle ms-2">
+                            Fruits & Vegetables
+                        </span>
                     </Link>
-                    <Link href="#" className="inline-block align-middle items-center px-[10px] gap-2 text-white lg:text-base text-sm py-3">
-                        <Image src="/image/Dairy Products.svg"
+                    <Link
+                        href="#"
+                        className="inline-block align-middle items-center px-[10px] gap-2 text-white lg:text-base text-sm py-3"
+                    >
+                        <Image
+                            src="/image/Dairy Products.svg"
                             alt="DailyWe Logo"
                             width={24}
                             height={24}
                             className="object-contain lg:w-[24px] lg:h-[24px] w-[20px] h-[20px] inline-block align-middle"
                             priority
                         />
-                        <span className="inline-block align-middle ms-2">Dairy Products</span>
+                        <span className="inline-block align-middle ms-2">
+                            Dairy Products
+                        </span>
                     </Link>
-                    <Link href="#" className="inline-block align-middle items-center px-[10px] gap-2 text-white lg:text-base text-sm py-3">
-                        <Image src="/image/Chicken & Eggs.svg"
+                    <Link
+                        href="#"
+                        className="inline-block align-middle items-center px-[10px] gap-2 text-white lg:text-base text-sm py-3"
+                    >
+                        <Image
+                            src="/image/Chicken & Eggs.svg"
                             alt="DailyWe Logo"
                             width={24}
                             height={24}
                             className="object-contain lg:w-[24px] lg:h-[24px] w-[20px] h-[20px] inline-block align-middle"
                             priority
                         />
-                        <span className="inline-block align-middle ms-2">Chicken & Eggs</span>
+                        <span className="inline-block align-middle ms-2">
+                            Chicken & Eggs
+                        </span>
                     </Link>
-                    <Link href="#" className="inline-block align-middle items-center px-[10px] gap-2 text-white lg:text-base text-sm py-3">
-                        <Image src="/image/Dry Fruits & Nuts.svg"
+                    <Link
+                        href="#"
+                        className="inline-block align-middle items-center px-[10px] gap-2 text-white lg:text-base text-sm py-3"
+                    >
+                        <Image
+                            src="/image/Dry Fruits & Nuts.svg"
                             alt="DailyWe Logo"
                             width={24}
                             height={24}
                             className="object-contain lg:w-[24px] lg:h-[24px] w-[20px] h-[20px] inline-block align-middle"
                             priority
                         />
-                        <span className="inline-block align-middle ms-2">Dry Fruits & Nuts</span>
+                        <span className="inline-block align-middle ms-2">
+                            Dry Fruits & Nuts
+                        </span>
                     </Link>
-                    <Link href="#" className="inline-block align-middle items-center px-[10px] gap-2 text-white lg:text-base text-sm py-3">
-                        <Image src="/image/Packaging Material.svg"
+                    <Link
+                        href="#"
+                        className="inline-block align-middle items-center px-[10px] gap-2 text-white lg:text-base text-sm py-3"
+                    >
+                        <Image
+                            src="/image/Packaging Material.svg"
                             alt="DailyWe Logo"
                             width={24}
                             height={24}
                             className="object-contain lg:w-[24px] lg:h-[24px] w-[20px] h-[20px] inline-block align-middle"
                             priority
                         />
-                        <span className="inline-block align-middle ms-2">Packaging Material</span>
+                        <span className="inline-block align-middle ms-2">
+                            Packaging Material
+                        </span>
                     </Link>
-                    <Link href="#" className="inline-block align-middle items-center px-[10px] gap-2 text-white lg:text-base text-sm py-3">
-                        <Image src="/image/Ghee & Oils .svg"
+                    <Link
+                        href="#"
+                        className="inline-block align-middle items-center px-[10px] gap-2 text-white lg:text-base text-sm py-3"
+                    >
+                        <Image
+                            src="/image/Ghee & Oils .svg"
                             alt="DailyWe Logo"
                             width={24}
                             height={24}
@@ -304,53 +709,115 @@ export default function Header() {
                         />
                         <span className="inline-block align-middle ms-2">Ghee & Oils</span>
                     </Link>
-                    <Link href="#" className="inline-block align-middle items-center px-[10px] gap-2 text-white lg:text-base text-sm py-3">
-                        <Image src="/image/Bakery & Chocolates.svg"
+                    <Link
+                        href="#"
+                        className="inline-block align-middle items-center px-[10px] gap-2 text-white lg:text-base text-sm py-3"
+                    >
+                        <Image
+                            src="/image/Bakery & Chocolates.svg"
                             alt="DailyWe Logo"
                             width={24}
                             height={24}
                             className="object-contain lg:w-[24px] lg:h-[24px] w-[20px] h-[20px] inline-block align-middle"
                             priority
                         />
-                        <span className="inline-block align-middle ms-2">Bakery & Chocolates</span>
+                        <span className="inline-block align-middle ms-2">
+                            Bakery & Chocolates
+                        </span>
                     </Link>
-                    <Link href="#" className="inline-block align-middle items-center px-[10px] gap-2 text-white lg:text-base text-sm py-3">
-                        <Image src="/image/Pulses & Flours.svg"
+                    <Link
+                        href="#"
+                        className="inline-block align-middle items-center px-[10px] gap-2 text-white lg:text-base text-sm py-3"
+                    >
+                        <Image
+                            src="/image/Pulses & Flours.svg"
                             alt="DailyWe Logo"
                             width={24}
                             height={24}
                             className="object-contain lg:w-[24px] lg:h-[24px] w-[20px] h-[20px] inline-block align-middle"
                             priority
                         />
-                        <span className="inline-block align-middle ms-2">Pulses & Flours</span>
+                        <span className="inline-block align-middle ms-2">
+                            Pulses & Flours
+                        </span>
                     </Link>
-                    <Link href="#" className="inline-block align-middle items-center px-[10px] gap-2 text-white lg:text-base text-sm py-3">
-                        <Image src="/image/Fish & Seafood.svg"
+                    <Link
+                        href="#"
+                        className="inline-block align-middle items-center px-[10px] gap-2 text-white lg:text-base text-sm py-3"
+                    >
+                        <Image
+                            src="/image/Fish & Seafood.svg"
                             alt="DailyWe Logo"
                             width={24}
                             height={24}
                             className="object-contain lg:w-[24px] lg:h-[24px] w-[20px] h-[20px] inline-block align-middle"
                             priority
                         />
-                        <span className="inline-block align-middle ms-2">Fish & Seafood</span>
+                        <span className="inline-block align-middle ms-2">
+                            Fish & Seafood
+                        </span>
                     </Link>
                 </div>
-                <button className="w-[110px] relative flex items-center gap-2 lg:text-base text-sm ps-[13px] flex-shrink-0" onClick={() => setMoreMenuOpen(!moreMenuOpen)}>
-                    <Image src="/image/list.svg"
+                <div className="flex-1 block sm:hidden">
+                    <div className="relative">
+                        <div className="absolute inset-y-0 left-0 flex items-center pl-3">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-5 w-5 text-gray-400"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            >
+                                <circle cx="11" cy="11" r="8" />
+                                <path d="m21 21-4.3-4.3" />
+                            </svg>
+                        </div>
+                        <input
+                            type="text"
+                            placeholder='Search "Vegetables"'
+                            className="w-full rounded-md text-gray-500 border border-gray-300 bg-gray-50 py-2 pl-10 pr-4 text-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
+                        />
+                    </div>
+                </div>
+                <button
+                    className="w-[110px] relative sm:flex hidden items-center gap-2 lg:text-base text-sm ps-[13px] flex-shrink-0 cursor-pointer"
+                    onClick={() => setMoreMenuOpen(!moreMenuOpen)}
+                >
+                    <Image
+                        src="/image/list.svg"
                         alt="DailyWe Logo"
                         width={26}
                         height={26}
                         className="object-contain lg:w-[26px] lg:h-[26px] w-[22px] h-[22px]"
                         priority
-                    />More
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-[15px] h-[15px] mt-[1px]">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    />
+                    More
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="2"
+                        stroke="currentColor"
+                        className="w-[15px] h-[15px] mt-[1px]"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                        />
                     </svg>
                 </button>
                 {moreMenuOpen && (
                     <div className="absolute bg-white text-black p-2 shadow-md rounded-md z-10 right-9 mt-36">
-                        <Link href="#" className="block px-4 py-2">Item 1</Link>
-                        <Link href="#" className="block px-4 py-2">Item 2</Link>
+                        <Link href="#" className="block px-4 py-2">
+                            Item 1
+                        </Link>
+                        <Link href="#" className="block px-4 py-2">
+                            Item 2
+                        </Link>
                     </div>
                 )}
             </div>

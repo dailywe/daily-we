@@ -52,3 +52,7 @@
     color: var(--foreground);
     font-family: var(--font-lexend), sans-serif;
   }
+
+  .custom_images_color_filter {
+    filter: invert(75%) sepia(12%) saturate(6998%) hue-rotate(128deg) brightness(96%) contrast(95%);
+  }

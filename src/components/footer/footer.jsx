@@ -5,13 +5,12 @@ export default function Footer() {
     return (
         <footer className="bg-gray-100 text-[#202020] pt-12 pb-6">
             <div className="container mx-auto px-6">
-                <div className="flex items-start xl:justify-between lg:justify-start justify-between flex-wrap 2xl:mb-12 2xl:space-x-0 xl:space-x-14 space-x-10 space-y-10">
+                <div className="flex items-start justify-between 2xl:mb-12 xl:flex-nowrap flex-wrap sm:space-y-10 space-y-4">
                     {/* Logo and App Downloads Section */}
-                    <div className="w-[296px] mx-w-full flex flex-col lg:items-start items-center">
-                            <Image src="/image/logo/main_logo.png" alt="DailyWe Logo" width={211} height={72} className="xl:mb-[50px] mb-8 xl:w-[211px] h-[72px] w-[190px]" />
-                        <div>
-                            <h3 className="text-xl font-semibold text-[#002316] xl:mb-5 mb-4 lg:text-start text-center">Get deliveries with DailyWe</h3>
-                            <p className="xl:mb-[50px] mb-10 text-base font-light leading-relaxed lg:text-start text-center">
+                    <div className="xl:w-[296px] w-full max-w-full flex flex-col xl:items-start items-center ">
+                            <Image src="/image/logo/main_logo.png" alt="DailyWe Logo" width={211} height={72} className="xl:mb-[50px] mb-5 xl:w-[211px] h-[72px] w-[190px]" />
+                            <h3 className="text-xl font-semibold text-[#002316] xl:mb-5 mb-4 xl:text-start text-center">Get deliveries with DailyWe</h3>
+                            <p className="xl:mb-[50px] mb-5 text-base font-light leading-relaxed xl:text-start text-center">
                                 Nor again is there anyone who loves or pursues or desires to obtain.
                             </p>
                             <div className="flex space-x-3 lg:justify-start justify-center">
@@ -22,12 +21,11 @@ export default function Footer() {
                                     <Image src="/image/app-store.png" alt="Download on App Store" width={135} height={40} className="w-[135px] h-[40px]"/>
                                 </Link>
                             </div>
-                        </div>
                     </div>
 
                     {/* Top Categories Column */}
-                    <div className="w-auto">
-                        <h3 className="2xl:text-[20px] text-[19px] font-semibold text-[#002316] mb-[22px]">Top Categories</h3>
+                    <div className="lg:w-auto md:w-[34%] sm:w-[38%] w-full">
+                        <h3 className="2xl:text-[20px] text-[19px] font-semibold text-[#002316] sm:mb-[22px] mb-3">Top Categories</h3>
                         <ul className="space-y-2.5 text-sm">
                             <li>
                                 <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
@@ -78,8 +76,8 @@ export default function Footer() {
                     </div>
 
                     {/* Bulk Order Solutions Column */}
-                    <div className="w-auto">
-                        <h3 className="text-[20px] font-semibold text-[#002316] mb-[22px]">Bulk Order Solutions</h3>
+                    <div className="lg:w-auto md:w-[34%] sm:w-[38%] w-full">
+                        <h3 className="text-[20px] font-semibold text-[#002316] sm:mb-[22px] mb-3">Bulk Order Solutions</h3>
                         <ul className="space-y-2.5 text-sm">
                             <li>
                                 <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
@@ -130,8 +128,8 @@ export default function Footer() {
                     </div>
 
                     {/* DailyWe Programs Column */}
-                    <div className="w-auto">
-                        <h3 className="text-[20px] font-semibold text-[#002316] mb-[22px]">DailyWe Programs</h3>
+                    <div className="lg:w-auto md:w-[34%] sm:w-[38%] w-full">
+                        <h3 className="text-[20px] font-semibold text-[#002316] sm:mb-[22px] mb-3">DailyWe Programs</h3>
                         <ul className="space-y-2.5 text-sm">
                             <li>
                                 <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
@@ -182,8 +180,8 @@ export default function Footer() {
                     </div>
 
                     {/* Customer Support Column */}
-                    <div className="w-auto">
-                        <h3 className="text-[20px] font-semibold text-[#002316] mb-[22px]">Customer Support</h3>
+                    <div className="lg:w-auto md:w-[34%] sm:w-[38%] w-full">
+                        <h3 className="text-[20px] font-semibold text-[#002316] sm:mb-[22px] mb-3">Customer Support</h3>
                         <ul className="space-y-2.5 text-sm">
                             <li>
                                 <Link href="#" className="hover:text-[#2d6d5c] 2xl:text-base text-[15px] xl:leading-[26px] leading-5 font-light">
