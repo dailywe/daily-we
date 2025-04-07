@@ -1,15 +1,16 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Lexend } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header/header";
+import Footer from "@/components/footer/footer";
+import { CustomCartProvider } from "@/lib/context/CustomCartProvider";
+import { HeroUIProvider } from "@heroui/react";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Import Lexend with the correct settings
+const lexend = Lexend({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap", // Improves font rendering
+  variable: "--font-lexend", // This is important for Tailwind
 });
 
 export const metadata = {
@@ -19,12 +20,15 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {/* <Header /> */}
-        {children}
+    <html lang="en" className={lexend.variable}>
+      <body className="antialiased">
+        <HeroUIProvider>
+          <CustomCartProvider>
+            <Header />
+            {children}
+            <Footer />
+          </CustomCartProvider>
+        </HeroUIProvider>
       </body>
     </html>
   );
