@@ -4,12 +4,12 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useCustomCart } from "@/lib/context/CustomCartProvider";
-import { Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from "@heroui/react";
+// import { Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from "@heroui/react";
 
 export default function Header() {
 
     const { items, cartTotal, removeItem, isCartOpen, setCartOpen, updateItemQuantity } = useCustomCart();
-    const { isOpen, onOpen, onOpenChange, onClose: onModalClose } = useDisclosure();
+    // const { isOpen, onOpen, onOpenChange, onClose: onModalClose } = useDisclosure();
 
     const [location, setLocation] = useState("Select Location");
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -54,7 +54,7 @@ export default function Header() {
 
     return (
         <>
-            <Modal onClose={handleCloseModal} isOpen={!isOpen} onOpenChange={onOpenChange} className="max-w-[450px] !rounded-1.5 border border-gray-100 ">
+            {/* <Modal onClose={handleCloseModal} isOpen={!isOpen} onOpenChange={onOpenChange} className="max-w-[450px] !rounded-1.5 border border-gray-100 ">
                 <ModalContent>
                     <>
                         <ModalHeader className="flex flex-col md:px-[30px] px-5 pt-[18px] pb-0 gap-0">
@@ -122,7 +122,7 @@ export default function Header() {
                         </ModalBody>
                     </>
                 </ModalContent>
-            </Modal>
+            </Modal> */}
 
             <header className="w-full bg-white">
                 <div className="mx-auto flex items-center justify-between py-3 sm:px-10 px-4 border-b border-[#0023161A]">

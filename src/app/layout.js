@@ -3,7 +3,7 @@ import "./globals.css";
 import Header from "@/components/header/header";
 import Footer from "@/components/footer/footer";
 import { CustomCartProvider } from "@/lib/context/CustomCartProvider";
-import { HeroUIProvider } from "@heroui/react";
+// import { HeroUIProvider } from "@heroui/react";
 
 // Import Lexend with the correct settings
 const lexend = Lexend({
@@ -22,13 +22,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={lexend.variable}>
       <body className="antialiased">
-        <HeroUIProvider>
+        {/* <HeroUIProvider> */}
           <CustomCartProvider>
             <Header />
             {children}
             <Footer />
           </CustomCartProvider>
-        </HeroUIProvider>
+        {/* </HeroUIProvider> */}
       </body>
     </html>
   );
